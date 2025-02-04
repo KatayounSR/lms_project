@@ -1,10 +1,13 @@
 from django.db import models
+from users.models import *
 
+# Course Model
 class Course(models.Model):
-    name = models.CharField(max_length=200)
-    teacher = models.ForeignKey('users.CustomUser', on_delete=models.CASCADE, related_name='courses')
-    students = models.ManyToManyField('users.CustomUser', related_name='enrolled_courses', blank=True)
-
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+    instructor = models.ForeignKey(Professor, on_delete=models.CASCADE, related_name='courses')
+    students = models.ManyToManyField(Student, related_name='courses')
+    
     def __str__(self):
         return self.name
 

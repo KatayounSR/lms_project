@@ -1,0 +1,44 @@
+{% extends "panel_base.html" %}
+
+{% block title %}دوره‌های من{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            <div class="card shadow-lg">
+                <div class="card-header bg-success text-white text-center">
+                    <h3><i class="bi bi-book"></i> دوره‌های ثبت‌شده</h3>
+                </div>
+                <div class="card-body">
+                    {% if enrolled_courses %}
+                        <ul class="list-group">
+                            {% for course in enrolled_courses %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h5 class="mb-1">{{ course.name }}</h5>
+                                        <small class="text-muted">
+                                            <i class="bi bi-person"></i> استاد: {{ course.professor.user.username }} |
+                                            <i class="bi bi-people"></i> تعداد دانشجویان: {{ course.students.count }}
+                                        </small>
+                                    </div>
+                                    <div>
+                                        <a href="{% url 'course_detail' course.id %}" class="btn btn-info btn-sm">
+                                            <i class="bi bi-eye"></i> مشاهده
+                                        </a>
+                                        <a href="{% url 'unenroll_course' course.id %}" class="btn btn-danger btn-sm">
+                                            <i class="bi bi-x-circle"></i> خروج
+                                        </a>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-muted text-center">شما هنوز در هیچ دوره‌ای ثبت‌نام نکرده‌اید.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

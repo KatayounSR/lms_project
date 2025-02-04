@@ -1,0 +1,30 @@
+{% extends "panel_base.html" %}
+
+{% block title %}{{ course.name }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg">
+                <div class="card-header bg-info text-white text-center">
+                    <h3>{{ course.name }}</h3>
+                </div>
+                <div class="card-body">
+                    <p><strong>استاد:</strong> {{ course.professor.user.name }}</p>
+                    <p><strong>توضیحات:</strong> {{ course.description }}</p>
+                    <p><strong>تعداد دانشجویان ثبت‌نام‌شده:</strong> {{ course.students.count }}</p>
+
+                    {% if user.is_student %}
+                        {% if user.student_profile in course.students.all %}
+                            <p class="text-success">شما در این دوره ثبت‌نام کرده‌اید.</p>
+                        {% else %}
+                            <a href="{% url 'enroll_course' course.id %}" class="btn btn-success">ثبت‌نام در دوره</a>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
