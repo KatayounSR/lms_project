@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}داشبورد{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3>پنل مدیریتی</h3>
+                </div>
+                <div class="card-body">
+                    <h5 class="text-center">خوش آمدید، {{ user.name }}</h5>
+                    <hr>
+                    
+                    {% if user.is_professor %}
+                        <h4 class="text-success">پنل اساتید</h4>
+                        <p>شما به عنوان استاد وارد شده‌اید. می‌توانید دوره‌های خود را مدیریت کنید.</p>
+                        <a href="{% url 'manage_courses' %}" class="btn btn-outline-primary">مدیریت دوره‌ها</a>
+                    {% elif user.is_student %}
+                        <h4 class="text-info">پنل دانشجویی</h4>
+                        <p>شما به عنوان دانشجو وارد شده‌اید. دوره‌های ثبت‌شده خود را مشاهده کنید.</p>
+                        <a href="{% url 'student_courses' %}" class="btn btn-outline-success">دوره‌های من</a>
+                    {% else %}
+                        <p class="text-danger">نقش شما مشخص نشده است.</p>
+                    {% endif %}
+                </div>
+                <div class="card-footer text-center">
+                    <a href="{% url 'logout' %}" class="btn btn-danger">خروج از حساب</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

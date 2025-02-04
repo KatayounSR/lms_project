@@ -1,0 +1,62 @@
+{% extends 'panel_base.html' %}
+
+{% block title %}پنل دانشجویی{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-lg mb-4">
+        <div class="card-header bg-success text-white text-center">
+            <h3>پنل دانشجویی</h3>
+        </div>
+        <div class="card-body">
+            <h4 class="text-center text-primary">دوره‌های من</h4>
+            {% if courses %}
+                <div class="list-group">
+                    {% for course in courses %}
+                        <a href="{% url 'course_detail' course.id %}" class="list-group-item list-group-item-action">
+                            <i class="bi bi-book"></i> {{ course.name }}
+                        </a>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-center text-muted">شما در هیچ دوره‌ای ثبت‌نام نکرده‌اید.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="card shadow-lg mb-4">
+        <div class="card-header bg-info text-white text-center">
+            <h4>نمرات من</h4>
+        </div>
+        <div class="card-body">
+            {% if grades %}
+                {% for course in courses %}
+                    <div class="mb-4">
+                        <h5 class="text-dark"><i class="bi bi-mortarboard"></i> {{ course.name }}</h5>
+                        <div class="table-responsive">
+                            <table class="table table-bordered text-center">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>نمره</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for grade in grades %}
+                                        {% if grade.course == course %}
+                                            <tr>
+                                                <td>{{ grade.score }}</td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-center text-muted">هنوز نمره‌ای ثبت نشده است.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
