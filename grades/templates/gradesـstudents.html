@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center">ویرایش نمره دانشجو</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="score">نمره</label>
+            <input type="text" class="form-control" name="score" value="{{ grade.score }}" required>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">ذخیره نمره</button>
+    </form>
+</div>
+{% endblock %}

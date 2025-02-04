@@ -1,0 +1,48 @@
+{% extends "panel_base.html" %}
+
+{% block title %}نمرات دانشجویان - {{ course.name }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3>نمرات دانشجویان در دوره {{ course.name }}</h3>
+                </div>
+                <div class="card-body">
+                    <p><strong>استاد:</strong> {{ course.instructor.user.name }}</p>
+                    <p><strong>تعداد دانشجویان ثبت‌نام‌شده:</strong> {{ course.students.count }}</p>
+
+                    {% if grades %}
+                        <table class="table table-bordered mt-3">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>نام دانشجو</th>
+                                    <th>نام کاربری</th>
+                                    <th>نمره</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for grade in grades %}
+                                    <tr>
+                                        <td>{{ grade.student.user.name }}</td>
+                                        <td>{{ grade.student.user.username }}</td>
+                                        <td>{{ grade.score }}</td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="3" class="text-center">هنوز نمره‌ای ثبت نشده است.</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <p class="text-danger">هنوز نمره‌ای برای این دوره ثبت نشده است.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

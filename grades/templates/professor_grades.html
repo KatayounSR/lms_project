@@ -1,0 +1,42 @@
+{% extends "panel_base.html" %}
+
+{% block title %}لیست نمرات{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">لیست نمرات دانشجویان</h2>
+
+    {% for course, grades in grades_by_course.items %}
+    <div class="card shadow-lg mb-4">
+        <div class="card-header bg-primary text-white text-center">
+            <h3>{{ course.name }}</h3>
+        </div>
+        <div class="card-body">
+            <p><strong>استاد:</strong> {{ course.instructor.user.name }}</p>
+            <p><strong>تعداد دانشجویان ثبت‌نام‌شده:</strong> {{ course.students.count }}</p>
+
+            {% if grades %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>نام دانشجو</th>
+                        <th>نمره</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for grade in grades %}
+                    <tr>
+                        <td>{{ grade.student.user.name }}</td>
+                        <td>{{ grade.score }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p class="text-muted text-center">هنوز نمره‌ای برای این دوره ثبت نشده است.</p>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
