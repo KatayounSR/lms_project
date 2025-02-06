@@ -21,7 +21,7 @@ def student_dashboard(request):
 
     return render(request, 'users/student_dashboard.html', {'courses': courses, 'grades': grades})
 
-
+@login_required
 def student_list(request):
     """نمایش لیست تمامی دانشجویان"""
     students = Student.objects.all()  # دریافت تمامی دانشجویان
@@ -54,8 +54,13 @@ def user_register(request):
                 user.is_professor = True
 
             user.save()
+
+            if role == 'student':
+                Student.objects.create(user=user)
+            elif role == 'professor':
+                Professor.objects.create(user=user)
+
             login(request, user)
-            #messages.success(request, "ثبت‌نام با موفقیت انجام شد!")
 
             if role == 'student':
                 return redirect('student_dashboard')
@@ -65,6 +70,7 @@ def user_register(request):
         form = UserRegisterForm()
     
     return render(request, 'users/register.html', {'form': form})
+
 
 def user_login(request):
     """ورود کاربر (استاد یا دانشجو)"""
@@ -77,14 +83,14 @@ def user_login(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                messages.success(request, f"خوش آمدید {user.name}!")
+                #messages.success(request, f"خوش آمدید {user.name}!")
 
                 if user.is_student == 'student':
                     return redirect('student_dashboard')
                 else:
                     return redirect('professor_dashboard')
-            else:
-                messages.error(request, "نام کاربری یا رمز عبور نادرست است.")
+            #else:
+                #messages.error(request, "نام کاربری یا رمز عبور نادرست است.")
     else:
         form = UserLoginForm()
 
@@ -93,5 +99,5 @@ def user_login(request):
 def user_logout(request):
     """خروج از سیستم"""
     logout(request)
-    messages.success(request, "با موفقیت خارج شدید!")
+    #messages.success(request, "با موفقیت خارج شدید!")
     return redirect('index')

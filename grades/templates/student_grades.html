@@ -10,35 +10,82 @@
         </div>
         <div class="card-body">
             {% if grades %}
-                {% for course in courses %}
-                    <div class="mb-4">
-                        <h5 class="text-dark"><i class="bi bi-book"></i> {{ course.name }}</h5>
-                        <div class="table-responsive">
-                            <table class="table table-bordered text-center">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>نمره</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for grade in grades %}
-                                        {% if grade.course == course %}
-                                            <tr>
-                                                <td class="fw-bold {% if grade.score >= 50 %}text-success{% else %}text-danger{% endif %}">
-                                                    {{ grade.score }}
-                                                </td>
-                                            </tr>
-                                        {% endif %}
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                {% endfor %}
+                <div class="table-responsive">
+                    <table class="table table-bordered text-center">
+                        <thead class="table-light">
+                            <tr>
+                                <th>درس</th>
+                                <th>نمره</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for grade in grades %}
+                                <tr>
+                                    <td>{{ grade.course.name }}</td>
+                                    <td class="fw-bold {% if grade.score >= 50 %}text-success{% else %}text-danger{% endif %}">
+                                        {{ grade.score }}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             {% else %}
                 <p class="text-center text-muted">شما هنوز نمره‌ای دریافت نکرده‌اید.</p>
             {% endif %}
         </div>
     </div>
 </div>
+
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white text-center">
+            <h3><i class="bi bi-bar-chart"></i> نمودار نمرات شما</h3>
+        </div>
+        <div class="card-body">
+            <canvas id="gradesChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<a href="{% url 'download_grades' %}" class="btn btn-success mt-3">
+    <i class="bi bi-download"></i> دانلود نمرات (CSV)
+</a>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    //console.log("Course Names:", '{{ course_names|safe }}');
+    //console.log("Scores:", '{{ scores|safe }}');
+
+    var courseNames = JSON.parse('{{ course_names|safe }}');
+    var scores = JSON.parse('{{ scores|safe }}');
+
+    var ctx = document.getElementById('gradesChart').getContext('2d');
+    var gradesChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: courseNames,
+            datasets: [{
+                label: 'نمره',
+                data: scores,
+                backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 20
+                }
+            }
+        }
+    });
+</script>
+
+
 {% endblock %}

@@ -4,18 +4,28 @@ from .models import Course
 from .forms import CourseForm
 from users.models import Student, Professor
 
+
 @login_required
-def enroll_in_course(request, course_id):
-    """ثبت‌نام در دوره"""
-    course = Course.objects.get(id=course_id)
-    student_profile = request.user.student_profile
+def available_courses(request):
+    """نمایش دوره‌های موجود برای ثبت‌نام"""
+    student_profile = get_object_or_404(Student, user=request.user)
+    
+    # دریافت دوره‌هایی که دانشجو هنوز ثبت‌نام نکرده است
+    courses = Course.objects.exclude(students=student_profile)
+    
+    return render(request, 'student_available_courses.html', {'courses': courses})
 
-    # بررسی که آیا دانشجو قبلاً در این دوره ثبت‌نام کرده است
-    if course not in student_profile.courses.all():
-        student_profile.courses.add(course)
-        student_profile.save()
+@login_required
+def enroll_course(request, course_id):
+    """ثبت‌نام دانشجو در دوره"""
+    course = get_object_or_404(Course, id=course_id)
+    student_profile = get_object_or_404(Student, user=request.user)
 
-    return redirect('student_dashboard')
+    if student_profile not in course.students.all():
+        course.students.add(student_profile)
+
+    return redirect('student_courses')
+
 
 @login_required
 def manage_courses(request):
@@ -30,18 +40,15 @@ def manage_courses(request):
     return render(request, 'manage_courses.html', {'courses': courses})
 
 
-@login_required
 def student_courses(request):
-    """نمایش دوره‌های دانشجویی"""
+    """نمایش دوره‌های دانشجو"""
     if not request.user.is_student:
-        return redirect('panel')
+        return redirect('professor_dashboard')
 
-    # بررسی و ایجاد پروفایل در صورت عدم وجود
-    student_profile, created = Student.objects.get_or_create(user=request.user)
+    student_profile = request.user.student_profile
+    courses = student_profile.courses.all()
 
-    courses = student_profile.courses.all()  # دوره‌هایی که دانشجو در آن‌ها ثبت‌نام کرده است
     return render(request, 'student_courses.html', {'courses': courses})
-
 
 @login_required
 def create_course(request):

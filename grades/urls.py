@@ -6,5 +6,6 @@ urlpatterns = [
     path('student-grades/', student_grades, name='student_grades'),
     path('grade-student/<int:course_id>/<int:student_id>/', grade_student, name='grade_student'),
     path('download-grades/', download_grades, name='download_grades'),
+    path('submit_grade/<int:course_id>/', submit_grade, name='submit_grade'),
 ]
 

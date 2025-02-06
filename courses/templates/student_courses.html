@@ -9,32 +9,19 @@
             <div class="card shadow-lg">
                 <div class="card-header bg-success text-white text-center">
                     <h3><i class="bi bi-book"></i> دوره‌های ثبت‌شده</h3>
-                </div>
+                </div>                    
                 <div class="card-body">
-                    {% if enrolled_courses %}
-                        <ul class="list-group">
-                            {% for course in enrolled_courses %}
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h5 class="mb-1">{{ course.name }}</h5>
-                                        <small class="text-muted">
-                                            <i class="bi bi-person"></i> استاد: {{ course.professor.user.username }} |
-                                            <i class="bi bi-people"></i> تعداد دانشجویان: {{ course.students.count }}
-                                        </small>
-                                    </div>
-                                    <div>
-                                        <a href="{% url 'course_detail' course.id %}" class="btn btn-info btn-sm">
-                                            <i class="bi bi-eye"></i> مشاهده
-                                        </a>
-                                        <a href="{% url 'unenroll_course' course.id %}" class="btn btn-danger btn-sm">
-                                            <i class="bi bi-x-circle"></i> خروج
-                                        </a>
-                                    </div>
-                                </li>
+                    <h4 class="text-center text-primary">دوره‌های من</h4>
+                    {% if courses %}
+                        <div class="list-group">
+                            {% for course in courses %}
+                                <a href="{% url 'course_detail' course.id %}" class="list-group-item list-group-item-action">
+                                    <i class="bi bi-book"></i> {{ course.name }}
+                                </a>
                             {% endfor %}
-                        </ul>
+                        </div>
                     {% else %}
-                        <p class="text-muted text-center">شما هنوز در هیچ دوره‌ای ثبت‌نام نکرده‌اید.</p>
+                        <p class="text-center text-muted">شما در هیچ دوره‌ای ثبت‌نام نکرده‌اید.</p>
                     {% endif %}
                 </div>
             </div>

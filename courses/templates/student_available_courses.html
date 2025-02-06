@@ -1,0 +1,32 @@
+{% extends "panel_base.html" %}
+
+{% block title %}دوره‌های موجود{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3>دوره‌های موجود برای ثبت‌نام</h3>
+                </div>
+                <div class="card-body">
+                    {% if courses %}
+                        <ul class="list-group">
+                            {% for course in courses %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    {{ course.name }}
+                                    <a href="{% url 'enroll_course' course.id %}" class="btn btn-success btn-sm">ثبت‌نام</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-muted text-center">هیچ دوره‌ای برای ثبت‌نام در دسترس نیست.</p>
+                    {% endif %}
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

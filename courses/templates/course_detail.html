@@ -15,12 +15,23 @@
                     <p><strong>توضیحات:</strong> {{ course.description }}</p>
                     <p><strong>تعداد دانشجویان ثبت‌نام‌شده:</strong> {{ course.students.count }}</p>
 
-                    {% if user.is_student %}
-                        {% if user.student_profile in course.students.all %}
-                            <p class="text-success">شما در این دوره ثبت‌نام کرده‌اید.</p>
-                        {% else %}
-                            <a href="{% url 'enroll_course' course.id %}" class="btn btn-success">ثبت‌نام در دوره</a>
-                        {% endif %}
+                    {% if user.student_profile in course.students.all %}
+                        <p class="text-success">شما در این دوره ثبت‌نام کرده‌اید.</p>
+
+                        <!-- نمایش فرم برای ثبت نمره -->
+                        <form method="post" action="{% url 'submit_grade' course.id %}">
+                            {% csrf_token %}
+                            <label for="score">نمره شما:</label>
+                            <input type="number" name="score" id="score" class="form-control" step="0.01" required>
+                            <button type="submit" class="btn btn-primary mt-2">ثبت نمره</button>
+                        </form>
+
+                        <!-- نمایش نمره ثبت‌شده در صورت وجود -->
+                        {% for grade in user.student_profile.grades.all %}
+                            {% if grade.course == course %}
+                                <p class="mt-3"><strong>نمره شما:</strong> {{ grade.score }}</p>
+                            {% endif %}
+                        {% endfor %}
                     {% endif %}
                 </div>
             </div>
